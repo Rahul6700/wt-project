@@ -1,0 +1,107 @@
+html{
+  background-image: url(./image.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+#navbar {
+  height: 75px;
+  margin: -8px;
+  background-color: black;
+  display: flex;
+  align-items: center;
+  color: aliceblue;
+  gap: 30px;
+}
+
+#navbar button { 
+  height: 40px;
+  width: 100px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  padding: 10px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#login{
+  margin-left:auto;
+}
+#navbar h1 {
+  padding-left: 30px;
+}
+
+#home {
+    display: flex;
+    justify-content: center;
+    height: 90vh;
+}
+
+#container {
+  background-color: #000;
+  color: #fff;
+  padding: 60px;
+  max-width: 800px;
+  margin: auto;
+  text-align: center;
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 
+               'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  box-shadow: 5px 5px 8px rgb(0, 0, 100);
+  border-radius: 15px;
+}
+
+/* Create Party Button Style */
+#btn-create-party {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  padding: 20px 30px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 5px;
+  font-size: 24px;
+}
+
+/* Room Code Display Style */
+#room-code {
+  margin-top: 20px;
+}
+
+/* OR Text Style */
+#or-text {
+  margin: 20px 0;
+}
+
+/* Textarea Style */
+#textarea-input {
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background-color: #222;
+  color: #ffffff;
+  resize: none;
+  width: 60%;
+  height: 24px;
+  font-size: 16px;
+}
+
+/* Submit Button Style */
+#btn-submit {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  padding: 10px 30px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+/* Flexbox for Submit Section */
+#flex-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+}
