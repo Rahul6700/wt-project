@@ -4,14 +4,21 @@ import { customAlphabet } from 'nanoid';
 export default function Home() {
     const [roomCode, setRoomCode] = useState(''); //the room code that is created
     const [inputCode, setInputCode] = useState(''); //the user input in textarea
+    const [socket, setSocket] = useState(null); //we're creating a ws instance
 
     const createParty = () => {
-        const generateRoomId = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 6);
-        setRoomCode(generateRoomId());
+      const generateRoomId = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 6);
+      setRoomCode(generateRoomId());
+        
+      const newSocket = new WebSocket('ws://localhost:5000');
+      setSocket(newSocket);
+
+
+        
     };
 
     const handleCode = () => {
-        // logic to reroute if the code is correct else error handling
+       // logic to reroute if the code is correct else error handling
     };
 
     return (
@@ -19,7 +26,7 @@ export default function Home() {
     <button id="btn-create-party" onClick={createParty}>
       Create Party
     </button>
-    {roomCode && <h2 id="room-code">Room Code: {roomCode}</h2>}
+    <h2 id="room-code">Room Code: {roomCode}</h2>}
     <h1 id="or-text">OR</h1>
     <div id="flex-container">
       <textarea
@@ -34,4 +41,3 @@ export default function Home() {
     </div>
   </div>
    );
-}
