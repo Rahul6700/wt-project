@@ -1,4 +1,4 @@
-html{
+html {
   background-image: url(./image.png);
   background-size: cover;
   background-repeat: no-repeat;
@@ -12,11 +12,13 @@ html{
   align-items: center;
   color: aliceblue;
   gap: 30px;
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 
+               'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 
 #navbar button { 
   height: 40px;
-  width: 100px;
+  width: auto;
   background-color: #333;
   color: #fff;
   border: none;
@@ -24,19 +26,33 @@ html{
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
+  transition: background-color 0.3s ease;
 }
 
-#login{
-  margin-left:auto;
+#navbar button:hover {
+  background-color: #555;
 }
+
+#btn1 {
+  margin-left: auto;
+}
+
 #navbar h1 {
   padding-left: 30px;
 }
 
 #home {
-    display: flex;
-    justify-content: center;
-    height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+}
+
+#home h1 {
+  color: #ffffff;
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 
+               'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 
 #container {
@@ -52,7 +68,6 @@ html{
   border-radius: 15px;
 }
 
-/* Create Party Button Style */
 #btn-create-party {
   background-color: #333;
   color: #fff;
@@ -62,19 +77,13 @@ html{
   cursor: pointer;
   margin-bottom: 5px;
   font-size: 24px;
+  transition: transform 0.3s ease;
 }
 
-/* Room Code Display Style */
-#room-code {
-  margin-top: 20px;
+#btn-create-party:hover {
+  transform: scale(1.1);
 }
 
-/* OR Text Style */
-#or-text {
-  margin: 20px 0;
-}
-
-/* Textarea Style */
 #textarea-input {
   padding: 10px;
   border-radius: 4px;
@@ -85,9 +94,13 @@ html{
   width: 60%;
   height: 24px;
   font-size: 16px;
+  transition: background-color 0.3s ease;
 }
 
-/* Submit Button Style */
+#textarea-input:focus {
+  background-color: #444;
+}
+
 #btn-submit {
   background-color: #333;
   color: #fff;
@@ -96,12 +109,166 @@ html{
   border-radius: 4px;
   cursor: pointer;
   font-size: 20px;
+  transition: transform 0.3s ease;
 }
 
-/* Flexbox for Submit Section */
+#btn-submit:hover {
+  transform: scale(1.1);
+}
+
 #flex-container {
   display: flex;
   align-items: center;
   gap: 10px;
   justify-content: center;
 }
+
+#party-page {
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 
+               'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+
+h4 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  font-size: 20px;
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 
+               'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+
+#card-holder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+#card-container {
+  background-color: #000;
+  color: #fff;
+  padding: 60px;
+  height: 250px;
+  max-width: 200px;
+  text-align: center;
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 
+               'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  box-shadow: 5px 5px 8px rgb(0, 0, 100);
+  border-radius: 15px;
+  transition: transform 0.3s ease;
+}
+
+#card-container button { 
+  height: 40px;
+  width: 100px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  padding: 10px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#card-container:hover {
+  transform: translateY(-10px);
+}
+
+#answer-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 1rem;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+}
+
+#answerbox {
+  width: 90%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #1a1a1a;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+#answerbox:hover {
+  transform: scale(1.02);
+}
+
+#answerbox textarea {
+  width: 100%;
+  height: 20px;
+  background-color: #333;
+  color: aliceblue;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 16px;
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  resize: none;
+  transition: background-color 0.3s ease;
+}
+
+#answerbox textarea:focus {
+  background-color: #444;
+}
+
+#answerbox button {
+  height: 40px;
+  width: auto;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  align-self: flex-end;
+  margin-left: 10px;
+  transition: background-color 0.3s ease;
+}
+
+#answerbox button:hover {
+  background-color: #45a049;
+}
+
+#or-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: 80px;
+}
+
+.loading-spinner {
+  position: relative;
+  top: 50%;
+  left: 46%;
+  transform: translate(-50%, -50%);
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+

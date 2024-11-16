@@ -1,43 +1,59 @@
 import React, { useState } from 'react';
 import { customAlphabet } from 'nanoid';
+import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
-    const [roomCode, setRoomCode] = useState(''); //the room code that is created
-    const [inputCode, setInputCode] = useState(''); //the user input in textarea
-    const [socket, setSocket] = useState(null); //we're creating a ws instance
+    const [inputCode, setInputCode] = useState(''); // User input state
+    const [loading, setLoading] = useState(false); // State for loading
+    const navigate = useNavigate(); // Hook for navigation
 
     const createParty = () => {
-      const generateRoomId = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 6);
-      setRoomCode(generateRoomId());
-        
-      const newSocket = new WebSocket('ws://localhost:5000');
-      setSocket(newSocket);
-
-
-        
+        const generateRoomId = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 6);
+        const newRoomCode = generateRoomId();
+        setLoading(true);
+        setTimeout(() => {
+            navigate(`/${newRoomCode}`);
+        }, 2000); 
     };
 
     const handleCode = () => {
-       // logic to reroute if the code is correct else error handling
+        if (inputCode) {
+            setLoading(true);
+            setTimeout(() => {
+                navigate(`/${inputCode}`);
+            }, 2000);
+        } else {
+            alert("Please enter a valid code.");
+        }
     };
 
     return (
-  <div id="container">
-    <button id="btn-create-party" onClick={createParty}>
-      Create Party
-    </button>
-    <h2 id="room-code">Room Code: {roomCode}</h2>}
-    <h1 id="or-text">OR</h1>
-    <div id="flex-container">
-      <textarea
-        id="textarea-input"
-        placeholder="Enter code"
-        value={inputCode}
-        onChange={(e) => setInputCode(e.target.value)}
-      ></textarea>
-      <button id="btn-submit" onClick={handleCode}>
-        Submit
-      </button>
-    </div>
-  </div>
-   );
+        <div id="container">
+            <button id="btn-create-party" onClick={createParty} disabled={loading}>
+                Create Room
+            </button>
+
+            <div id="or-container">
+                {loading ? (
+                    <div className="loading-spinner"></div>
+                ) : (
+                    <h1 style={{ margin: "20px 0" }}>OR</h1>
+                )}
+            </div>
+
+            <div id="flex-container">
+                <textarea
+                    id="textarea-input"
+                    placeholder="Enter code"
+                    value={inputCode}
+                    onChange={(e) => setInputCode(e.target.value)}
+                    required
+                ></textarea>
+                <button id="btn-submit" onClick={handleCode} disabled={loading}>
+                    Submit
+                </button>
+            </div>
+        </div>
+    );
+}
+
