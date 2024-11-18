@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import Card from '../components/card.js';
+import Sidebar from '../components/sidebar.js';
 import Answerbox from '../components/answerbox.js';
 
 export default function Party() {
   const { roomCode } = useParams();
-  const [cards, setCards] = useState([]);
-
-  // Function to fetch users
+  const [players, setPlayers] = useState([]);
+  
   async function fetchUsers(roomId) {
     try {
       const response = await fetch('http://localhost:3000/showUsers', {
@@ -21,8 +20,9 @@ export default function Party() {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const users = await response.json(); // Parse the response as JSON
-      setCards(users); // Update the state with the fetched users
+      const users = await response.json();
+      console.log(users); // Parse the response as JSON
+      setPlayers(users); // Update the state with the fetched users
     } catch (error) {
       console.error('Error fetching users:', error);
     }
@@ -33,25 +33,20 @@ export default function Party() {
     if (roomCode) {
       fetchUsers(roomCode); // Fetch users with the provided roomCode
     }
-  }, [roomCode]); // Dependency array ensures this runs when roomCode changes
-
-  // Handle removing a user (kicking out)
-  const handleKickOut = (id) => {
-    setCards((prevCards) => prevCards.filter((cardId) => cardId !== id));
-  };
+  }, [roomCode]);
 
   return (
     <>
-      <div id='party-page'>
-        <h1>Welcome to Room: {roomCode}</h1>
+      <div id="party-page" className="text-white flex justify-center items-center font-sans">
+      <h1 className="text-4xl font-extrabold">Welcome to Room: {roomCode}</h1>
       </div>
-      <div id='card-holder'>
-        {cards.map((cardId) => (
-          <Card key={cardId} id={cardId} onKickOut={handleKickOut} />
-        ))}
+      <div>
+        <Sidebar items={players}/>
       </div>
-      <h4>Share the code so that you can invite your friends!</h4>
-      <div id='answer-container'>
+      <h4 className="flex justify-center items-center text-white text-lg font-sans">
+        Share the code so that you can invite your friends!
+      </h4>
+      <div className="fixed bottom-0 left-0 w-full p-4 bg-gray-900 flex justify-center">
         <Answerbox />
       </div>
     </>

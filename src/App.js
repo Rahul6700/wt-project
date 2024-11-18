@@ -6,7 +6,7 @@ import Party from "./pages/party";
 export default function App() {
   return (
     <Router>
-      <Navbar btn1text="Create Room" btn2text="Join Room"/>
+      <Navbar/>
       <Routes>
         <Route path="/" element={<div id="home"><Home /></div>} />
         <Route path="/:roomCode" element={<Party />} /> 

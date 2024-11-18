@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html {
   background-image: url(./image.png);
   background-size: cover;
@@ -6,17 +10,17 @@ html {
 
 #navbar {
   height: 75px;
-  margin: -8px;
+  margin-top: -8px;
   background-color: black;
   display: flex;
   align-items: center;
   color: aliceblue;
   gap: 30px;
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 
-               'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 
-#navbar button { 
+#navbar button {
   height: 40px;
   width: auto;
   background-color: #333;
@@ -51,8 +55,8 @@ html {
 
 #home h1 {
   color: #ffffff;
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 
-               'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 
 #container {
@@ -62,8 +66,8 @@ html {
   max-width: 800px;
   margin: auto;
   text-align: center;
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 
-               'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
   box-shadow: 5px 5px 8px rgb(0, 0, 100);
   border-radius: 15px;
 }
@@ -128,55 +132,8 @@ html {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 
-               'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-}
-
-h4 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #ffffff;
-  font-size: 20px;
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 
-               'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-}
-
-#card-holder {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-}
-
-#card-container {
-  background-color: #000;
-  color: #fff;
-  padding: 60px;
-  height: 250px;
-  max-width: 200px;
-  text-align: center;
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 
-               'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-  box-shadow: 5px 5px 8px rgb(0, 0, 100);
-  border-radius: 15px;
-  transition: transform 0.3s ease;
-}
-
-#card-container button { 
-  height: 40px;
-  width: 100px;
-  background-color: #333;
-  color: #fff;
-  border: none;
-  padding: 10px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-#card-container:hover {
-  transform: translateY(-10px);
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 
 #answer-container {
@@ -191,7 +148,7 @@ h4 {
 }
 
 #answerbox {
-  width: 90%;
+  width: 95%;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -203,7 +160,7 @@ h4 {
 }
 
 #answerbox:hover {
-  transform: scale(1.02);
+  transform: scale(1.01);
 }
 
 #answerbox textarea {
@@ -227,7 +184,7 @@ h4 {
 #answerbox button {
   height: 40px;
   width: auto;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: #fff;
   border: none;
   padding: 10px 15px;
@@ -271,4 +228,3 @@ h4 {
     transform: rotate(360deg);
   }
 }
-
