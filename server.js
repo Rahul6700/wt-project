@@ -8,6 +8,18 @@ app.get('/', (req, res) => {
 
 app.use(express.json());
 
+app.post('/createRoom', (req, res) => {
+  const id = req.body.id;
+  // make a new db instance for the room
+  // return a variable, say 'done'
+  // if room is successfully created 'done = 1' , else 'done = 0'
+  if (done == 1) {
+    res.status(200).send(1);
+  } else {
+    res.send(500).send(0);
+  }
+});
+
 app.post('/joinRoom', (req, res) => {
   const user = req.body.user;
   const id = req.body.id;
