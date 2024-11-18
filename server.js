@@ -8,7 +8,7 @@ app.get('/', (req, res) => {
 
 app.use(express.json());
 
-app.post('/', (req, res) => {
+app.post('/joinRoom', (req, res) => {
   const user = req.body.user;
   const id = req.body.id;
   //store user in DB under the correct room_id
@@ -29,8 +29,8 @@ app.post('/guess', (req, res) => {
   //store yes or no in a variable, say "ans" (1 for yes, 0 for no)
 
   //just for demo
-  const room_id = 100;
-  const ans = 'china';
+  // const room_id = 100;
+  // const ans = 'china';
 
   if (id != room_id) {
     res.status(404).send(2); //2 means invalid room
@@ -48,12 +48,24 @@ app.post('/guess', (req, res) => {
 //image fetching from db
 app.post('/fetch', (req, res) => {
   const id = req.body.id;
-  //need to fetch a random img from db
+  //need to fetch a random img from db along with the answer
+  // store img url in 'img', answer in 'ans'
+  if (img && ans) {
+    res.status(200).send({ a, b });
+  } else {
+    res.status(500).send('error fetching image');
+  }
 });
 
 //function to show connected users in the room
-app.post('/', (req, res) => {
+app.post('/showUsers', (req, res) => {
+  let list = [];
   const id = req.body.id;
+  // return all the connected users in the room and store them in a list
+  list.push('ashish');
+  list.push('rahul');
+  list.push('ram');
+  res.status(200).send(list);
 });
 
 app.listen(port, () => {
