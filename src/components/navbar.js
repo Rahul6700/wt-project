@@ -8,7 +8,7 @@ export default function Navbar({ username }) {
   };
 
   return (
-    <div className='bg-black text-white h-16 flex items-center px-6 shadow-lg'>
+    <div className='bg-black text-white h-16 flex items-center px-6 shadow-lg text-center'>
       <h1 onClick={goToHome} className='text-xl font-semibold cursor-pointer'>
         GuessLoc
       </h1>
