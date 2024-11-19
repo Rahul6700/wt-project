@@ -3,17 +3,15 @@ import { customAlphabet } from 'nanoid';
 import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
-  const [inputCode, setInputCode] = useState(''); // User input for room code
-  const [userName, setUserName] = useState(''); // User input for username
-  const [loading, setLoading] = useState(false); // State for loading
-  const navigate = useNavigate(); // Hook for navigation
+  const [inputCode, setInputCode] = useState('');
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const createParty = () => {
     const generateRoomId = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 6);
     const newRoomCode = generateRoomId();
     setLoading(true);
     setTimeout(() => {
-      // Navigate to the new room with room code
       navigate(`/${newRoomCode}`);
     }, 2000);
   };
@@ -22,56 +20,46 @@ export default function Home() {
     if (inputCode) {
       setLoading(true);
       setTimeout(() => {
-        // Navigate to the existing room with the input code
         navigate(`/${inputCode}`);
-        console.log(userName);
       }, 2000);
     } else {
       alert('Please enter a valid code.');
     }
   };
-  return (
-    <div className='bg-black text-white p-16 mx-auto max-w-3xl text-center rounded-xl shadow-md'>
-      <div className='bg-transparent text-white py-4 px-6 rounded-md text-xl mb-12'>
-        Welcome to "gamename"
-        <textarea
-          className='bg-gray-800 text-white p-3 rounded-md border border-gray-600 w-2/3 h-11 text-base transition-colors duration-300 focus:bg-gray-700 resize-none overflow-hidden mt-6'
-          placeholder='Enter Username'
-          value={userName} // Use userName here
-          onChange={(e) => setUserName(e.target.value)} // Update username state
-          required
-          maxLength={20}
-        ></textarea>
-      </div>
 
-      <hr className='border-t-3 border-gray-900 my-8 rounded-xl' />
-      <button
-        className='bg-gray-800 text-white py-4 px-6 rounded-md text-xl transition-transform duration-300 transform hover:scale-110 mt-5'
-        onClick={createParty(j)}
-        disabled={loading}
-      >
-        Create Room
-      </button>
-      <div className='relative my-6'>
-        <h1 className='text-xl'>OR</h1>
-      </div>
-      <div className='flex items-center justify-center gap-4'>
-        <textarea
-          className='bg-gray-800 text-white p-3 rounded-md border border-gray-600 w-2/3 h-11 text-base transition-colors duration-300 focus:bg-gray-700 resize-none overflow-hidden'
-          placeholder='Enter code'
-          value={inputCode} // Use inputCode for the room code
-          onChange={(e) => setInputCode(e.target.value)} // Update code state
-          required
-          maxLength={6}
-        ></textarea>
+  return (
+    <>
+      <div className='bg-gray-900 text-white p-12 mx-auto max-w-3xl text-center rounded-xl shadow-lg'>
         <button
-          className='bg-gray-800 text-white py-2 px-6 rounded-md text-lg transition-transform duration-300 transform hover:scale-110'
-          onClick={handleCode}
+          className='bg-purple-600 text-white py-4 px-6 rounded-md text-xl font-bold transition-transform duration-300 transform hover:scale-105 hover:bg-purple-500 focus:ring-2 focus:ring-purple-400 mb-8'
+          onClick={createParty}
           disabled={loading}
         >
-          Submit
+          Create Room
         </button>
+
+        <div className='relative mb-6'>
+          <h1 className='text-xl text-gray-300'>OR</h1>
+        </div>
+
+        <div className='flex items-center justify-center gap-4'>
+          <textarea
+            className='bg-gray-700 text-white p-3 rounded-md border border-gray-600 w-2/3 h-11 text-base transition-colors duration-300 focus:bg-gray-600 focus:ring-2 focus:ring-blue-400 resize-none overflow-hidden'
+            placeholder='Enter Code'
+            value={inputCode}
+            onChange={(e) => setInputCode(e.target.value)}
+            required
+            maxLength={6}
+          ></textarea>
+          <button
+            className='bg-blue-500 text-white py-2 px-6 rounded-md text-lg font-semibold transition-transform duration-300 transform hover:scale-105 hover:bg-blue-400 focus:ring-2 focus:ring-blue-300'
+            onClick={handleCode}
+            disabled={loading}
+          >
+            Submit
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

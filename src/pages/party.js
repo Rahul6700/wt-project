@@ -6,7 +6,7 @@ import Answerbox from '../components/answerbox.js';
 export default function Party() {
   const { roomCode } = useParams();
   const [players, setPlayers] = useState([]);
-  
+
   async function fetchUsers(roomId) {
     try {
       const response = await fetch('http://localhost:3000/showUsers', {
@@ -37,19 +37,21 @@ export default function Party() {
 
   return (
     <>
-      <div id="party-page" className="text-white flex justify-center items-center font-sans">
-      <h1 className="text-4xl font-extrabold">Welcome to Room: {roomCode}</h1>
+      <div
+        id='party-page'
+        className='text-white flex justify-center items-center font-sans'
+      >
+        <h1 className='text-4xl font-extrabold'>Welcome to Room: {roomCode}</h1>
       </div>
       <div>
-        <Sidebar items={players}/>
+        <Sidebar items={players} />
       </div>
-      <h4 className="flex justify-center items-center text-white text-lg font-sans">
+      <h4 className='flex justify-center items-center text-white text-lg font-sans'>
         Share the code so that you can invite your friends!
       </h4>
-      <div className="fixed bottom-0 left-0 w-full p-4 bg-gray-900 flex justify-center">
+      <div className='fixed bottom-0 left-0 w-full p-4 bg-gray-900 flex justify-center'>
         <Answerbox />
       </div>
     </>
   );
 }
-
