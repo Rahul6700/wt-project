@@ -191,23 +191,34 @@ app.post('/fetch', async (req, res) => {
   }
 });
 
-// Show connected users in the room
-app.post('/showUsers', async (req, res) => {
-  const roomId = req.body.id;
-
-  try {
-    // Find the room
-    const room = await db.collection('rooms').findOne({ roomId });
-    if (!room) {
-      return res.status(404).send([]);
+  app.post('/showUsers', async (req, res) => {
+    const roomId = req.body.id;
+  
+    try {
+      // Connect to MongoDB
+      const connectedClient = await MongoClient.connect(url);
+      const db = connectedClient.db('Game_DB');
+  
+      // Check if the collection exists
+      const collections = await db.listCollections({ name: roomId }).toArray();
+      if (collections.length === 0) {
+        // If the collection doesn't exist, send a 404 response
+        res.status(404).send({ error: 'Room not found' });
+        return;
+      }
+  
+      // Fetch all documents from the collection
+      const roomCollection = db.collection(roomId);
+      const users = await roomCollection.find().toArray();
+  
+      // Send the data as a response
+      res.status(200).send(users);
+      console.log('array returned successfully')
+    } catch (err) {
+      console.error('Error fetching users:', err);
+      res.status(500).send({ error: 'Internal Server Error' });
     }
-
-    res.status(200).send(room.users); // Return list of users
-  } catch (err) {
-    console.error(err);
-    res.status(500).send([]);
-  }
-});
+  });
 
 app.listen(port, () => {
   console.log(`Backend listening on port ${port}`);
