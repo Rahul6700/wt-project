@@ -1,85 +1,173 @@
 const express = require('express');
+const { MongoClient } = require('mongodb'); // MongoDB library
 const app = express();
 const port = 5000;
+
+var url = "mongodb://127.0.0.1:27017";
+let client, dbu, dbi, collectionUsers, collectionImages;
+
+MongoClient.connect(url)
+  .then((connectedClient) => {
+    client = connectedClient;
+
+    // Connect to 'Users' database
+    dbu = client.db('Users');
+    collectionUsers = dbu.collection('users');
+    console.log('Connected to Users MongoDB');
+
+    // Connect to 'Images' database
+    dbi = client.db('Images');  
+    collectionImages = dbi.collection('images');
+    console.log('Connected to Images MongoDB');
+
+    // Insert user data into 'Images' collection
+    userData = {
+      "image" : "ramisgayhehe",
+      "answer" : "true",
+      "ID" : 69,
+    };
+
+    collectionImages.insertOne(userData)
+    .then((result) => {
+      console.log('User data inserted:', result.insertedId);
+      // Uncomment the following line if you are in a request handler context:
+      // res.status(201).send('User details stored successfully');
+    })
+    .catch((err) => {
+      console.error('Error inserting user data:', err);
+      // Uncomment the following line if you are in a request handler context:
+      // res.status(500).send('Failed to store user details');
+    });
+
+  })
+  .catch((err) => {
+    console.error('Failed to connect to MongoDB:', err);
+  });
+
+app.use(express.json());
 
 app.get('/', (req, res) => {
   res.send('hello there!');
 });
 
-app.use(express.json());
+// Create a new room
+app.post('/createRoom', async (req, res) => {
+  const roomId = req.body.id;
 
-app.post('/createRoom', (req, res) => {
-  const id = req.body.id;
-  // make a new db instance for the room
-  // return a variable, say 'done'
-  // if room is successfully created 'done = 1' , else 'done = 0'
-  if (done == 1) {
-    res.status(200).send(1);
-  } else {
-    res.send(500).send(0);
-  }
-});
-
-app.post('/joinRoom', (req, res) => {
-  const user = req.body.user;
-  const id = req.body.id;
-  //store user in DB under the correct room_id
-  // if successfull return 1, else return 0 ( return it in a variable called 'join')
-  if (join == 1) {
-    res.status(200).send(req.body.user); // sends back username if successfull
-  } else {
-    res.status(400).send(0); // 0 means room joined successfully
-  }
-});
-
-//sending user guess to db
-app.post('/guess', (req, res) => {
-  const id = req.body.id;
-  const guess = req.body.guess;
-  //first check room_id, return a varible 'room_id', if room_id == id, return the room_id stored in db, else return 0
-  //check with db matching
-  //store yes or no in a variable, say "ans" (1 for yes, 0 for no)
-
-  //just for demo
-  // const room_id = 100;
-  // const ans = 'china';
-
-  if (id != room_id) {
-    res.status(404).send(2); //2 means invalid room
-    return;
-  } else {
-    if (ans == guess) {
-      res.status(200).send(1); // 1 means correct guess
-      return;
-    } else {
-      res.status(400).send(0); // 0 means wrong guess
+  try {
+    // Check if the room already exists
+    const existingRoom = await db.collection('rooms').findOne({ roomId });
+    if (existingRoom) {
+      return res.status(400).send('Room already exists');
     }
+
+    // Create a new room
+    await db.collection('rooms').insertOne({ roomId, users: [], scores: {} });
+    res.status(200).send(1); // Room created successfully
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(0); // Error creating room
   }
 });
 
-//image fetching from db
-app.post('/fetch', (req, res) => {
-  const id = req.body.id;
-  //need to fetch a random img from db along with the answer
-  // store img url in 'img', answer in 'ans'
-  if (img && ans) {
-    res.status(200).send({ a, b });
-  } else {
-    res.status(500).send('error fetching image');
+// Join an existing room
+app.post('/joinRoom', async (req, res) => {
+  const user = req.body.user;
+  const roomId = req.body.id;
+
+  try {
+    // Find the room
+    const room = await db.collection('rooms').findOne({ roomId });
+    if (!room) {
+      return res.status(404).send(0); // Room not found
+    }
+
+    // Add user to the room and initialize score
+    if (!room.users.includes(user)) {
+      await db.collection('rooms').updateOne(
+        { roomId },
+        { $push: { users: user }, $set: { [`scores.${user}`]: 0 } }
+      );
+    }
+
+    res.status(200).send(user); // User joined successfully
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(0); // Error joining room
   }
 });
 
-//function to show connected users in the room
-app.post('/showUsers', (req, res) => {
-  let list = [];
-  const id = req.body.id;
-  // return all the connected users in the room and store them in a list
-  list.push('ashish');
-  list.push('rahul');
-  list.push('ram');
-  res.status(200).send(list);
+// Handle user guesses
+app.post('/guess', async (req, res) => {
+  const roomId = req.body.id;
+  const guess = req.body.guess;
+  const user = req.body.user;
+
+  try {
+    // Find the room
+    const room = await db.collection('rooms').findOne({ roomId });
+    if (!room) {
+      return res.status(404).send(2); // Invalid room
+    }
+
+    const correctAnswer = room.correctAnswer || null; // Placeholder for answer retrieval logic
+
+    if (correctAnswer === guess) {
+      // Update the user's score
+      await db.collection('rooms').updateOne(
+        { roomId },
+        { $inc: { [`scores.${user}`]: 1 } }
+      );
+      res.status(200).send(1); // Correct guess
+    } else {
+      res.status(400).send(0); // Wrong guess
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(0); // Error processing guess
+  }
+});
+
+// Fetch a random image
+app.post('/fetch', async (req, res) => {
+  const roomId = req.body.id;
+
+  try {
+    // Find the room
+    const room = await db.collection('rooms').findOne({ roomId });
+    if (!room) {
+      return res.status(404).send('Invalid room ID');
+    }
+
+    // Logic to fetch a random image (mocked for demo)
+    const img = 'http://example.com/random.jpg'; // Placeholder URL
+    const ans = 'china'; // Placeholder answer
+
+    res.status(200).send({ img, ans });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error fetching image');
+  }
+});
+
+// Show connected users in the room
+app.post('/showUsers', async (req, res) => {
+  const roomId = req.body.id;
+
+  try {
+    // Find the room
+    const room = await db.collection('rooms').findOne({ roomId });
+    if (!room) {
+      return res.status(404).send([]);
+    }
+
+    res.status(200).send(room.users); // Return list of users
+  } catch (err) {
+    console.error(err);
+    res.status(500).send([]);
+  }
 });
 
 app.listen(port, () => {
-  console.log(`backend listening on ${port}`);
+  console.log(`Backend listening on port ${port}`);
 });
