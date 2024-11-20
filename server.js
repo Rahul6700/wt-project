@@ -4,27 +4,20 @@ const app = express();
 const port = 5000;
 
 var url = "mongodb://127.0.0.1:27017";
-let client, dbu, dbi, collectionUsers, collectionImages;
+let client, db, collectionImages;
 
 MongoClient.connect(url)
   .then((connectedClient) => {
     client = connectedClient;
 
-    // Connect to 'Users' database
-    dbu = client.db('Users');
-    collectionUsers = dbu.collection('users');
+    db = client.db('Game_DB');
+    collectionImages = db.collection('Images');
     console.log('Connected to Users MongoDB');
 
-    // Connect to 'Images' database
-    dbi = client.db('Images');  
-    collectionImages = dbi.collection('images');
-    console.log('Connected to Images MongoDB');
-
-    // Insert user data into 'Images' collection
     userData = {
-      "image" : "ramisgayhehe",
-      "answer" : "true",
-      "ID" : 69,
+      "image" : "apex",
+      "answer" : "ashish",
+      "ID" : 5,
     };
 
     collectionImages.insertOne(userData)
@@ -46,56 +39,104 @@ MongoClient.connect(url)
 
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send('hello there!');
+app.get('/pink', (req, res) => {
+  console.log("request requested")
 });
 
-// Create a new room
-app.post('/createRoom', async (req, res) => {
-  const roomId = req.body.id;
+  app.post('/createRoom', (req, res) => {
+    const roomID = req.body.id; // Corrected variable name to roomID
+    const user = req.body.user;
+    const score = 0; // Default score for the user
+  
+    MongoClient.connect(url)
+      .then((connectedClient) => {
+        client = connectedClient;
+  
+        // Connect to the Game_DB database
+        db = client.db('Game_DB');
+  
+        // Create the new collection
+        db.createCollection(`${roomID}`)
+          .then(() => {
+            console.log(`New collection '${roomID}' created successfully`);
+  
+            // Open the newly created collection and insert the object
+            const roomCollection = db.collection(`${roomID}`);
+            const newUserData = {
+              username: user,
+              score: score,
+            };
+  
+            roomCollection.insertOne(newUserData)
+              .then((result) => {
+                console.log('User data inserted into the collection:', result.insertedId);
+                res.status(201).send('New collection created and user data added successfully');
+              })
+              .catch((err) => {
+                console.error('Error inserting user data into the collection:', err);
+                res.status(500).send('Failed to insert user data into the collection');
+              });
+          })
+          .catch((err) => {
+            console.error('Error creating new collection:', err);
+            res.status(500).send('Failed to create new collection');
+          });
+      })
+      .catch((err) => {
+        console.error('Failed to connect to MongoDB:', err);
+        res.status(500).send('Failed to connect to MongoDB');
+      });
+  });
+  
 
-  try {
-    // Check if the room already exists
-    const existingRoom = await db.collection('rooms').findOne({ roomId });
-    if (existingRoom) {
-      return res.status(400).send('Room already exists');
-    }
+  app.post('/joinRoom', async (req, res) => {
+    const user = req.body.user;
+    const roomId = req.body.id;
+  
+    MongoClient.connect(url)
+      .then((connectedClient) => {
+        client = connectedClient;
+  
+        db = client.db('Game_DB');
+  
+        // Check if the room collection exists
+        db.listCollections({ name: roomId }).toArray()
+          .then((collections) => {
+            if (collections.length > 0) {
+              // Fetch the room collection
+              const roomCollection = db.collection(roomId);
+  
+              // Insert user data into the room collection
+              const userData = {
+                user: user,
+                score: 0,
+              };
+  
+              roomCollection.insertOne(userData)
+                .then((result) => {
+                  console.log('User data inserted:', result.insertedId);
+                  res.status(201).send('User details stored successfully');
+                })
+                .catch((err) => {
+                  console.error('Error inserting user data:', err);
+                  res.status(500).send('Failed to store user details');
+                });
+            } else {
+              res.status(404).send('Room not found');
+            }
+          })
+          .catch((err) => {
+            console.error('Error checking collections:', err);
+            res.status(500).send('Failed to check existing collections');
+          });
+      })
+      .catch((err) => {
+        console.error('Failed to connect to MongoDB:', err);
+        res.status(500).send('Failed to connect to MongoDB');
+      });
+  });
+  
 
-    // Create a new room
-    await db.collection('rooms').insertOne({ roomId, users: [], scores: {} });
-    res.status(200).send(1); // Room created successfully
-  } catch (err) {
-    console.error(err);
-    res.status(500).send(0); // Error creating room
-  }
-});
-
-// Join an existing room
-app.post('/joinRoom', async (req, res) => {
-  const user = req.body.user;
-  const roomId = req.body.id;
-
-  try {
-    // Find the room
-    const room = await db.collection('rooms').findOne({ roomId });
-    if (!room) {
-      return res.status(404).send(0); // Room not found
-    }
-
-    // Add user to the room and initialize score
-    if (!room.users.includes(user)) {
-      await db.collection('rooms').updateOne(
-        { roomId },
-        { $push: { users: user }, $set: { [`scores.${user}`]: 0 } }
-      );
-    }
-
-    res.status(200).send(user); // User joined successfully
-  } catch (err) {
-    console.error(err);
-    res.status(500).send(0); // Error joining room
-  }
-});
 
 // Handle user guesses
 app.post('/guess', async (req, res) => {
