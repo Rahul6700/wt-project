@@ -3,14 +3,14 @@ const { MongoClient } = require('mongodb'); // MongoDB library
 const app = express();
 const port = 5000;
 
-var url = "mongodb://127.0.0.1:27017";
+var url = "mongodb://localhost:27017/";
 let client, db, collectionImages;
 
 MongoClient.connect(url)
   .then((connectedClient) => {
     client = connectedClient;
 
-    db = client.db('Game_DB');
+    db = client.db('Game');
     collectionImages = db.collection('Images');
     console.log('Connected to Users MongoDB');
 
@@ -53,7 +53,7 @@ app.get('/pink', (req, res) => {
         client = connectedClient;
   
         // Connect to the Game_DB database
-        db = client.db('Game_DB');
+        db = client.db('Game');
   
         // Create the new collection
         db.createCollection(`${roomID}`)
@@ -97,7 +97,7 @@ app.get('/pink', (req, res) => {
       .then((connectedClient) => {
         client = connectedClient;
   
-        db = client.db('Game_DB');
+        db = client.db('Game');
   
         // Check if the room collection exists
         db.listCollections({ name: roomId }).toArray()
@@ -197,7 +197,7 @@ app.post('/fetch', async (req, res) => {
     try {
       // Connect to MongoDB
       const connectedClient = await MongoClient.connect(url);
-      const db = connectedClient.db('Game_DB');
+      const db = connectedClient.db('Game');
   
       // Check if the collection exists
       const collections = await db.listCollections({ name: roomId }).toArray();
