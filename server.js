@@ -241,6 +241,40 @@ app.post('/showUsers', async (req, res) => {
   }
 });
 
+app.post('/leaveRoom', async (req, res) => {
+  const { user, roomId } = req.body;
+
+  try {
+    // Connect to MongoDB
+    const client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
+    const db = client.db('Game');
+
+    // Check if the room collection exists
+    const collections = await db.listCollections({ name: roomId }).toArray();
+    if (collections.length === 0) {
+      await client.close();
+      return res.status(404).json({ error: 'Room not found' });
+    }
+
+    // Check if the user exists in the room collection
+    const roomCollection = db.collection(roomId);
+    const userDoc = await roomCollection.findOne({ username: user });
+    if (!userDoc) {
+      await client.close();
+      return res.status(404).json({ error: 'User not found in the room' });
+    }
+
+    // Delete all objects associated with the user in the room collection
+    await roomCollection.deleteMany({ username: user });
+    res.status(200).json({ message: `User '${user}' removed from room '${roomId}' successfully` });
+
+    await client.close();
+  } catch (err) {
+    console.error('Error leaving the room:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 // Delete a room (collection)
 app.post('/deleteRoom', async (req, res) => {
   const roomId = req.body.id;
