@@ -1,52 +1,26 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export default function Navbar() {
-  const [username, setUsername] = useState(""); // State to store username
-  const [editing, setEditing] = useState(true); // State to toggle between input and display
+export default function Navbar({ username, setUsername }) {
   const navigate = useNavigate();
 
   const goToHome = () => {
-    navigate("/");
-  };
-
-  const handleUsernameSubmit = () => {
-    if (username.trim()) {
-      setEditing(false); // Switch to display mode
-    } else {
-      alert("Please enter your username!");
-    }
+    navigate('/');
   };
 
   return (
-    <div className="bg-black text-white h-16 flex items-center px-6 shadow-lg">
-      <h1 onClick={goToHome} className="text-xl font-semibold cursor-pointer">
-        GuessLoc
+    <div className='bg-gradient-to-r from-black to-gray-900 text-white h-16 flex items-center px-6 shadow-xl rounded-b-lg'>
+      <h1
+        onClick={goToHome}
+        className='text-2xl font-extrabold cursor-pointer transition-transform transform hover:scale-105 hover:text-gray-400'
+      >
+        guessloc
       </h1>
-      <div className="ml-auto text-sm">
-        {editing ? (
-          <div className="flex items-center gap-2">
-            <textarea
-              className="bg-gray-700 text-white p-2 rounded-md border border-gray-600 w-48 h-8 text-sm resize-none overflow-hidden focus:ring-2 focus:ring-purple-500"
-              placeholder="Enter username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              maxLength={20}
-            ></textarea>
-            <button
-              onClick={handleUsernameSubmit}
-              className="bg-purple-600 text-white py-1 px-4 rounded-md text-sm font-semibold transition-transform duration-300 transform hover:scale-105 hover:bg-purple-500 focus:ring-2 focus:ring-purple-400"
-            >
-              Submit
-            </button>
-          </div>
-        ) : (
-          <span>
-            Welcome, <span className="font-bold">{username}</span>
-          </span>
-        )}
+      <div className='ml-auto text-sm'>
+        <div className='flex items-center gap-2'>
+          <span className='text-lg font-semibold text-gray-500'>Guest</span>
+        </div>
       </div>
     </div>
   );
 }
-

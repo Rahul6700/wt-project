@@ -207,24 +207,20 @@ html {
   height: 80px;
 }
 
-.loading-spinner {
-  position: relative;
-  top: 50%;
-  left: 46%;
-  transform: translate(-50%, -50%);
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #3498db;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  animation: spin 1s linear infinite;
+.fade-in-out {
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
 }
 
-@keyframes spin {
+.fade-in-out:visible {
+  opacity: 1;
+}
+
+@keyframes fadeIn {
   0% {
-    transform: rotate(0deg);
+    opacity: 0;
   }
   100% {
-    transform: rotate(360deg);
+    opacity: 1;
   }
 }
