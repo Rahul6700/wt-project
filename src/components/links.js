@@ -15,12 +15,12 @@ export default function Links() {
           <span>GitHub</span>
         </a>
         <a
-          href='https://another-example.com'
+          href='https://hianime.to/home'
           target='_blank'
           rel='noopener noreferrer'
           className='text-sm font-semibold text-gray-400 hover:text-white transition'
         >
-          Website 2
+          <span>hianime</span>
         </a>
       </div>
     </div>
