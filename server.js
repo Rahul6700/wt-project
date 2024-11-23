@@ -7,37 +7,6 @@ var url =
   'mongodb+srv://AshishPavan:1n2n3n4n5n6n7n8n9n@cluster0.ijbul.mongodb.net/';
 let client, db;
 
-// MongoClient.connect(url)
-//   .then((connectedClient) => {
-//     client = connectedClient;
-
-//     db = client.db('Game');
-//     collectionImages = db.collection('Images');
-//     console.log('Connected to Users MongoDB');
-
-//     userData = {
-//       "image" : "apex",
-//       "answer" : "ashish",
-//       "ID" : 5,
-//     };
-
-//     collectionImages.insertOne(userData)
-//     .then((result) => {
-//       console.log('User data inserted:', result.insertedId);
-//       // Uncomment the following line if you are in a request handler context:
-//       // res.status(201).send('User details stored successfully');
-//     })
-//     .catch((err) => {
-//       console.error('Error inserting user data:', err);
-//       // Uncomment the following line if you are in a request handler context:
-//       // res.status(500).send('Failed to store user details');
-//     });
-
-//   })
-//   .catch((err) => {
-//     console.error('Failed to connect to MongoDB:', err);
-//   });
-
 app.use(express.json());
 
 app.get('/pink', (req, res) => {
@@ -244,41 +213,6 @@ app.post('/guess', async (req, res) => {
   }
 });
 
-// Handle user guesses
-// app.post('/guess', async (req, res) => {
-//   const { id: roomId, guess, user } = req.body;
-
-//   try {
-//     await MongoClient.connect(url);
-//     const db = client.db('Game');
-
-//     // Check if the room collection exists
-//     const collections = await db.listCollections({ name: roomId }).toArray();
-//     if (collections.length === 0) {
-//       return res.status(404).send('Room not found');
-//     }
-
-//     // Validate the user's guess
-//     if (currentImage && currentImage.answer === guess) {
-//       // Update user's score
-//       const roomCollection = db.collection(roomId);
-//       const userDoc = await roomCollection.findOne({ user });
-
-//       if (userDoc) {
-//         await roomCollection.updateOne({ user }, { $inc: { score: 1 } });
-//         res.status(200).send('Correct answer');
-//       } else {
-//         res.status(404).send('User not found in the room');
-//       }
-//     } else {
-//       res.status(400).send('Incorrect, try again');
-//     }
-//   } catch (err) {
-//     console.error('Error handling guess:', err);
-//     res.status(500).send('Error handling guess');
-//   }
-// });
-
 app.post('/showUsers', async (req, res) => {
   const roomId = req.body.id;
 
@@ -306,35 +240,6 @@ app.post('/showUsers', async (req, res) => {
     res.status(500).send({ error: 'Internal Server Error' });
   }
 });
-
-// app.post('/showUsers', async (req, res) => {
-//   const roomId = req.body.id;
-
-//   try {
-//     // Connect to MongoDB
-//     const connectedClient = await MongoClient.connect(url);
-//     const db = connectedClient.db('Game');
-
-//     // Check if the collection exists
-//     const collections = await db.listCollections({ name: roomId }).toArray();
-//     if (collections.length === 0) {
-//       // If the collection doesn't exist, send a 404 response
-//       res.status(404).send({ error: 'Room not found' });
-//       return;
-//     }
-
-//     // Fetch all documents from the collection
-//     const roomCollection = db.collection(roomId);
-//     const users = await roomCollection.find().toArray();
-
-//     // Send the data as a response
-//     res.status(200).send(users);
-//     console.log('array returned successfully')
-//   } catch (err) {
-//     console.error('Error fetching users:', err);
-//     res.status(500).send({ error: 'Internal Server Error' });
-//   }
-// });
 
 // Delete a room (collection)
 app.post('/deleteRoom', async (req, res) => {
