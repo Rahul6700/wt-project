@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { customAlphabet } from 'nanoid';
 import { useNavigate } from 'react-router-dom';
 
-export default function Home() {
+export default function Home({ setUsername }) {
   const [inputCode, setInputCode] = useState('');
   const [enteredUsername, setEnteredUsername] = useState('');
-  const [showRoomControls, setShowRoomControls] = useState(false); // to control the fade-in/fade-out effect
-  const [usernameError, setUsernameError] = useState(''); // state to manage error messages
+  const [showRoomControls, setShowRoomControls] = useState(false); 
+  const [usernameError, setUsernameError] = useState(''); 
   const navigate = useNavigate();
 
   const createRoom = async () => {
@@ -66,6 +66,7 @@ export default function Home() {
       setUsernameError('Username cannot be empty.');
     } else {
       setUsernameError('');
+      setUsername(enteredUsername);
       setShowRoomControls(true);
       console.log(enteredUsername);
     }
@@ -92,11 +93,9 @@ export default function Home() {
             required
             maxLength={20}
           />
-          {/* Error message if username is empty */}
           {usernameError && (
             <p className='text-red-500 text-sm mt-2'>{usernameError}</p>
           )}
-
           <button
             onClick={handleUsernameSubmit}
             className={`bg-blue-500 text-white py-2 px-6 rounded-md text-lg font-semibold transition-transform duration-300 transform hover:scale-105 hover:bg-blue-400 focus:ring-2 focus:ring-blue-300 mt-6 ml-2 ${enteredUsername.trim() === '' ? 'opacity-50 cursor-not-allowed' : ''}`}

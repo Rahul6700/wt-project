@@ -113,7 +113,8 @@ app.post('/createRoom', (req, res) => {
 app.post('/joinRoom', async (req, res) => {
   const user = req.body.user;
   const roomId = req.body.id;
-
+  console.log("Received Room ID:",roomId);
+  console.log("Received username: ",user);
   MongoClient.connect(url)
     .then((connectedClient) => {
       client = connectedClient;
@@ -127,7 +128,7 @@ app.post('/joinRoom', async (req, res) => {
             const roomCollection = db.collection(roomId);
 
             const userData = {
-              user: user,
+              username: user,
               score: 0,
             };
 
@@ -297,11 +298,8 @@ app.post('/showUsers', async (req, res) => {
     // Fetch all documents from the collection
     const roomCollection = db.collection(roomId);
     const users = await roomCollection.find().toArray();
-
     // Send the data as a response
     res.status(200).send(users);
-    console.log('array returned successfully');
-
     client.close();
   } catch (err) {
     console.error('Error fetching users:', err);

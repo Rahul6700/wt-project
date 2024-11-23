@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import Sidebar from '../components/sidebar.js';
 import Answerbox from '../components/answerbox.js';
 
-export default function Party() {
+export default function Room() {
   const { roomCode } = useParams();
   const [players, setPlayers] = useState([]);
 
@@ -44,21 +44,28 @@ export default function Party() {
   return (
     <>
       <div
-        id="party-page"
-        className="text-white flex justify-center items-center font-sans"
+        id='party-page'
+        className='text-white flex justify-center items-center font-sans flex-grow p-8'
       >
-        <h1 className="text-4xl font-extrabold">Welcome to Room: {roomCode}</h1>
+        <div>
+          <h1 className='text-4xl font-extrabold mb-4'>
+            Welcome to Room: {roomCode}
+          </h1>
+          <h4 className='text-lg text-white'>
+            Share the code so that you can invite your friends!
+          </h4>
+        </div>
       </div>
-      <div>
-        <Sidebar items={players} /> {/* Pass the players data to Sidebar */}
+
+      {/* Sidebar */}
+      <div className='absolute left-0 top-16'>
+        <Sidebar items={players} />
       </div>
-      <h4 className="flex justify-center items-center text-white text-lg font-sans">
-        Share the code so that you can invite your friends!
-      </h4>
-      <div className="fixed bottom-0 left-0 w-full p-4 bg-gray-900 flex justify-center">
+
+      {/* Floating Answerbox */}
+      <div className='absolute bottom-16 left-1/4 w-3/4 z-10'>
         <Answerbox />
       </div>
     </>
   );
 }
-
