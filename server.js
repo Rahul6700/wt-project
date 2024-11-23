@@ -75,30 +75,38 @@ app.post('/createRoom', (req, res) => {
                 'User data inserted into the collection:',
                 result.insertedId,
               );
-              res
-                .status(201)
-                .send(
+              res.status(201).json({
+                message:
                   'New collection created and user data added successfully',
-                );
+                userId: result.insertedId,
+                roomId: roomID,
+              });
             })
             .catch((err) => {
               console.error(
                 'Error inserting user data into the collection:',
                 err,
               );
-              res
-                .status(500)
-                .send('Failed to insert user data into the collection');
+              res.status(500).json({
+                error: 'Failed to insert user data into the collection',
+                details: err.message,
+              });
             });
         })
         .catch((err) => {
           console.error('Error creating new collection:', err);
-          res.status(500).send('Failed to create new collection');
+          res.status(500).json({
+            error: 'Failed to create new collection',
+            details: err.message,
+          });
         });
     })
     .catch((err) => {
       console.error('Failed to connect to MongoDB:', err);
-      res.status(500).send('Failed to connect to MongoDB');
+      res.status(500).json({
+        error: 'Failed to connect to MongoDB',
+        details: err.message,
+      });
     });
 });
 
