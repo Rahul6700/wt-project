@@ -143,8 +143,8 @@ app.post('/fetch', async (req, res) => {
       .findOne({ ID: randomIndex });
 
     // Log the randomIndex and currentImage for debugging
-    console.log('Random Index:', randomIndex);
-    console.log('Current Image:', currentImage);
+    // console.log('Random Index:', randomIndex);
+    // console.log('Current Image:', currentImage);
 
     if (!currentImage) {
       client.close();
@@ -212,11 +212,16 @@ app.post('/showUsers', async (req, res) => {
       return res.status(404).send({ error: 'Room not found' });
     }
 
-    // Fetch all documents from the collection
+    // Fetch all usernames from the collection
     const roomCollection = db.collection(roomId);
-    const users = await roomCollection.find().toArray();
-    console.log(users);
-    // Send the data as a response
+    const users11 = await roomCollection.find({}, { projection: { username: 1, _id: 0 } }).toArray();
+    const users = users11.map(user => user.username);
+    console.log(`in server.js ${users} and type` + typeof users)
+
+    // Extract the usernames into an array
+    //const usernames = users.map(user => user.username);
+
+    // Send the array of usernames as a response
     res.status(200).send(users);
     client.close();
   } catch (err) {
@@ -224,7 +229,35 @@ app.post('/showUsers', async (req, res) => {
     res.status(500).send({ error: 'Internal Server Error' });
   }
 });
-
+// app.post('/showUsers', async (req, res) => {
+//   const roomId = req.body.id;
+//
+//   try {
+//     // Connect to MongoDB
+//     const client = await MongoClient.connect(url);
+//     const db = client.db('Game');
+//
+//     // Check if the collection exists
+//     const collections = await db.listCollections({ name: roomId }).toArray();
+//     if (collections.length === 0) {
+//       // If the collection doesn't exist, send a 404 response
+//       client.close();
+//       return res.status(404).send({ error: 'Room not found' });
+//     }
+//
+//     // Fetch all documents from the collection
+//     const roomCollection = db.collection(roomId);
+//     const users = await roomCollection.find().toArray();
+//     console.log(users);
+//     // Send the data as a response
+//     res.status(200).send(users);
+//     client.close();
+//   } catch (err) {
+//     console.error('Error fetching users:', err);
+//     res.status(500).send({ error: 'Internal Server Error' });
+//   }
+// });
+//
 app.post('/leaveRoom', async (req, res) => {
   const { user, roomId } = req.body;
   try {

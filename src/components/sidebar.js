@@ -24,9 +24,15 @@ export default function Sidebar() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const users = await response.json();
+        console.log(typeof users);
+        const playerNames = users.map((user) => user.username); // Assuming `users` is an array of usernames
 
-        // Set players if the structure is correct
+        // Update players with the mapped data
         setPlayers(users);
+        //console.log(players);
+        // Set players if the structure is correct
+        // setPlayers(users);
+        // console.log(users);
       } catch (error) {
         console.error('Error fetching users:', error);
       }

@@ -7,6 +7,7 @@ export default function Room({ username }) {
   const { roomCode } = useParams();
   const [players, setPlayers] = useState([]);
   const [imageData, setImageData] = useState(null);
+  const [imageAns, setimageAns] = useState(null);
   const [userScore, setUserScore] = useState(0); // State to store the player's score
 
   // Fetch users in the room
@@ -45,11 +46,45 @@ export default function Room({ username }) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      setImageData(data); // Update the state with the fetched image
+      setimageAns(data.answer);
+      setImageData(data.url); // Update the state with the fetched image
     } catch (error) {
       console.error('Error fetching image:', error);
     }
   }
+
+  // Function to fetch image data
+  // async function fetchImage(roomId) {
+  //   const apiUrl = 'http://your-server-address/fetch'; // Replace with your server's address
+  //   let imageUrl = '';
+  //   let imageAnswer = '';
+  //
+  //   try {
+  //     const response = await fetch(apiUrl, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ id: roomId }),
+  //     });
+  //
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       imageUrl = data.url;
+  //       imageAnswer = data.answer;
+  //
+  //       // Log or use the values
+  //       console.log('Image URL:', imageUrl);
+  //       console.log('Image Answer:', imageAnswer);
+  //     } else {
+  //       console.error('Error fetching image:', response.statusText);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //   }
+  //
+  //   return { imageUrl, imageAnswer };
+  // }
 
   // Handle user's guess and update score
   async function handleGuess(guess) {
@@ -123,7 +158,7 @@ export default function Room({ username }) {
           <div className='text-center'>
             <div className='w-[640px] h-[480px] bg-gray-900 rounded-lg overflow-hidden flex items-center justify-center shadow-lg'>
               <img
-                src={imageData.url}
+                src={imageData}
                 alt='Game Image'
                 className='object-contain w-full h-full'
               />
