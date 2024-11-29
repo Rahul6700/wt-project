@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { FaTrash } from 'react-icons/fa'; // Import the trash icon from react-icons
 
 export default function Sidebar() {
   const { roomCode } = useParams();
@@ -23,6 +24,11 @@ export default function Sidebar() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const users = await response.json();
+
+        // Log the response to check the structure
+        console.log('Fetched users:', users);
+
+        // Set players if the structure is correct
         setPlayers(users);
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -31,61 +37,70 @@ export default function Sidebar() {
 
     if (roomCode) {
       fetchUsers();
-      const intervalId = setInterval(() => fetchUsers(), 2000);
+      const intervalId = setInterval(() => fetchUsers(), 1000); // Poll for updates every second
 
-      return () => clearInterval(intervalId);
+      return () => clearInterval(intervalId); // Cleanup on unmount
     }
   }, [roomCode]);
 
   // Handle delete room request
   const deleteRoom = async () => {
-    try {
-      const response = await fetch('http://localhost:3000/deleteRoom', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id: roomCode }),
-      });
+    const userConfirmed = window.confirm(
+      'Are you sure you want to delete this room? This action cannot be undone.',
+    );
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    if (userConfirmed) {
+      try {
+        const response = await fetch('http://localhost:3000/deleteRoom', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id: roomCode }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log(result.message);
+        navigate('/');
+      } catch (error) {
+        console.error('Error deleting room:', error);
       }
-
-      const result = await response.json();
-      console.log(result.message);
-
-      navigate('/');
-    } catch (error) {
-      console.error('Error deleting room:', error);
+    } else {
+      console.log('Room deletion canceled.');
     }
   };
 
   return (
-    <div className="h-screen w-64 bg-gray-800 text-white shadow-xl rounded-b-xl fixed top-16 flex flex-col">
-      <div className="p-4 border-b border-gray-700">
-        <h2 className="text-lg font-bold text-gray-300">Code: {roomCode}</h2>
+    <div className='h-screen w-64 bg-gray-800 text-white shadow-xl rounded-b-xl fixed top-16 flex flex-col'>
+      <div className='p-4 border-b border-gray-700 flex justify-between items-center'>
+        <h2 className='text-lg font-bold text-gray-300'>Code: {roomCode}</h2>
+        <button
+          onClick={deleteRoom}
+          className='text-red-500 hover:text-red-400 transition'
+          title='Delete Room'
+        >
+          <FaTrash className='text-lg' />
+        </button>
       </div>
-      <ul className="p-4 space-y-2 flex-1 overflow-y-auto">
+      <ul className='p-4 space-y-2 flex-1 overflow-y-auto'>
+        {/* Accessing the 'user' property, not 'username' */}
         {players.map((player, index) => (
           <li
             key={index}
-            className="p-2 rounded-md hover:bg-gray-700 cursor-pointer"
+            className='p-2 rounded-md hover:bg-gray-700 cursor-pointer'
           >
-            <span className="block font-bold">{player.username}</span>
-            <span className="block text-sm text-gray-400">Score: {player.score}</span>
+            <span className='block font-bold'>{player.user || 'Unknown'}</span>{' '}
+            {/* Use player.user */}
+            <span className='block text-sm text-gray-400'>
+              Score: {player.score || 0} {/* Default score to 0 if undefined */}
+            </span>
           </li>
         ))}
       </ul>
-      <div className="p-4 mt-10"> {/* Added mt-auto to push the button to the bottom */}
-        <button
-          onClick={deleteRoom}
-          className="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-500 focus:ring-2 focus:ring-red-400 transition"
-        >
-          Delete Room
-        </button>
-      </div>
     </div>
   );
 }
-

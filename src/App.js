@@ -4,14 +4,15 @@ import Navbar from './components/navbar';
 import Home from './components/home';
 import Room from './pages/room';
 import Instructions from './pages/instructions';
-import Links from './components/links.js'; 
 import About from './pages/about.js';
+
 export default function App() {
-  const [username, setUsername] = useState(''); 
+  const [username, setUsername] = useState('');
+
   return (
     <Router>
       <div className='flex flex-col min-h-screen'>
-        <Navbar username={username} />
+        <Navbar />
         <main className='flex-grow'>
           <Routes>
             <Route
@@ -42,12 +43,11 @@ export default function App() {
                 </div>
               }
             />
-            <Route path='/:roomCode' element={<Room />} />
+            <Route path='/:roomCode' element={<Room username={username} />} />
             <Route path='/how-to-play' element={<Instructions />} />
-            <Route path='/about-us' element={<About/>}/>
+            <Route path='/about-us' element={<About />} />
           </Routes>
         </main>
-        <Links />
       </div>
     </Router>
   );

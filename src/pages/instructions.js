@@ -69,7 +69,7 @@ export default function HowToPlay() {
       <div className='mt-12'>
         <button
           className='bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-bold hover:bg-blue-500 transition'
-          onClick={() => (window.location.href = '/')} // Navigate to the home page
+          onClick={() => (window.location.href = '/')} 
         >
           Start Playing Now!
         </button>

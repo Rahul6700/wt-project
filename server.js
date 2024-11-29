@@ -82,8 +82,8 @@ app.post('/createRoom', (req, res) => {
 app.post('/joinRoom', async (req, res) => {
   const user = req.body.user;
   const roomId = req.body.id;
-  console.log("Received Room ID:",roomId);
-  console.log("Received username: ",user);
+  console.log('Received Room ID:', roomId);
+  console.log('Received username: ', user);
   MongoClient.connect(url)
     .then((connectedClient) => {
       client = connectedClient;
@@ -175,27 +175,22 @@ app.post('/fetch', async (req, res) => {
 });
 
 // Handle user guesses
-// Handle user guesses
 app.post('/guess', async (req, res) => {
   const { id: roomId, guess, user, currentImage } = req.body;
-
   try {
     const client = await MongoClient.connect(url);
     const db = client.db('Game');
-
     // Check if the room collection exists
     const collections = await db.listCollections({ name: roomId }).toArray();
     if (collections.length === 0) {
       client.close();
       return res.status(404).send('Room not found');
     }
-
     // Validate the user's guess
     if (currentImage && currentImage.answer === guess) {
       // Update user's score
       const roomCollection = db.collection(roomId);
       const userDoc = await roomCollection.findOne({ user });
-
       if (userDoc) {
         await roomCollection.updateOne({ user }, { $inc: { score: 1 } });
         res.status(200).send('Correct answer');
@@ -205,7 +200,6 @@ app.post('/guess', async (req, res) => {
     } else {
       res.status(400).send('Incorrect, try again');
     }
-
     client.close();
   } catch (err) {
     console.error('Error handling guess:', err);
@@ -232,6 +226,7 @@ app.post('/showUsers', async (req, res) => {
     // Fetch all documents from the collection
     const roomCollection = db.collection(roomId);
     const users = await roomCollection.find().toArray();
+    console.log(users);
     // Send the data as a response
     res.status(200).send(users);
     client.close();
@@ -246,7 +241,10 @@ app.post('/leaveRoom', async (req, res) => {
 
   try {
     // Connect to MongoDB
-    const client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
+    const client = await MongoClient.connect(url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     const db = client.db('Game');
 
     // Check if the room collection exists
@@ -266,7 +264,9 @@ app.post('/leaveRoom', async (req, res) => {
 
     // Delete all objects associated with the user in the room collection
     await roomCollection.deleteMany({ username: user });
-    res.status(200).json({ message: `User '${user}' removed from room '${roomId}' successfully` });
+    res.status(200).json({
+      message: `User '${user}' removed from room '${roomId}' successfully`,
+    });
 
     await client.close();
   } catch (err) {
