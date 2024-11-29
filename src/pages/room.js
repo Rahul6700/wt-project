@@ -88,7 +88,6 @@ export default function Room({ username }) {
     if (roomCode) {
       fetchUsers(roomCode);
       fetchImage();
-
       const intervalId = setInterval(() => {
         fetchUsers(roomCode);
       }, 5000);
@@ -99,48 +98,52 @@ export default function Room({ username }) {
 
   return (
     <>
-      <div id="party-page" className="text-white flex justify-center items-center font-sans flex-grow p-8">
+      <div
+        id='party-page'
+        className='text-white flex justify-center items-center font-sans flex-grow p-8'
+      >
         <div>
-          <h1 className="text-4xl font-extrabold mb-4">
+          <h1 className='text-4xl font-extrabold mb-4'>
             Welcome to Room: {roomCode}
           </h1>
-          <h4 className="text-lg text-white">Share the code to invite your friends!</h4>
+          <h4 className='text-lg text-white'>
+            Share the code to invite your friends!
+          </h4>
         </div>
       </div>
 
       {/* Sidebar */}
-      <div className="absolute left-0 top-16">
+      <div className='absolute left-0 top-16'>
         <Sidebar items={players} />
       </div>
 
       {/* Image Display */}
-      <div className="flex flex-col items-center mt-8">
+      <div className='flex flex-col items-center mt-8'>
         {imageData ? (
-          <div className="text-center">
-            <div className="w-[640px] h-[480px] bg-gray-900 rounded-lg overflow-hidden flex items-center justify-center shadow-lg">
+          <div className='text-center'>
+            <div className='w-[640px] h-[480px] bg-gray-900 rounded-lg overflow-hidden flex items-center justify-center shadow-lg'>
               <img
                 src={imageData.url}
-                alt="Game Image"
-                className="object-contain w-full h-full"
+                alt='Game Image'
+                className='object-contain w-full h-full'
               />
             </div>
             <button
               onClick={fetchImage}
-              className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition"
+              className='mt-4 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition'
             >
               Next Image
             </button>
           </div>
         ) : (
-          <p className="text-gray-400">Loading image...</p>
+          <p className='text-gray-400'>Loading image...</p>
         )}
       </div>
 
       {/* Pass the handleGuess function to Answerbox */}
-      <div className="fixed bottom-0 left-0 w-full z-30">
+      <div className='fixed bottom-0 left-0 w-full z-30'>
         <Answerbox onGuess={handleGuess} />
       </div>
     </>
   );
 }
-

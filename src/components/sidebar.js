@@ -25,9 +25,6 @@ export default function Sidebar() {
         }
         const users = await response.json();
 
-        // Log the response to check the structure
-        console.log('Fetched users:', users);
-
         // Set players if the structure is correct
         setPlayers(users);
       } catch (error) {

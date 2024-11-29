@@ -3,15 +3,10 @@ const { MongoClient } = require('mongodb'); // MongoDB library
 const app = express();
 const port = 5000;
 
-var url =
-  'mongodb+srv://AshishPavan:1n2n3n4n5n6n7n8n9n@cluster0.ijbul.mongodb.net/';
+var url = 'mongodb+srv://AshishPavan:1n2n3n4n5n6n7n8n9n@cluster0.ijbul.mongodb.net/';
 let client, db;
 
 app.use(express.json());
-
-app.get('/pink', (req, res) => {
-  console.log('request requested');
-});
 
 app.post('/createRoom', (req, res) => {
   const roomID = req.body.id; // Corrected variable name to roomID
@@ -36,7 +31,6 @@ app.post('/createRoom', (req, res) => {
             username: user,
             score: score,
           };
-
           roomCollection
             .insertOne(newUserData)
             .then((result) => {
@@ -87,20 +81,16 @@ app.post('/joinRoom', async (req, res) => {
   MongoClient.connect(url)
     .then((connectedClient) => {
       client = connectedClient;
-
       db = client.db('Game');
-
       db.listCollections({ name: roomId })
         .toArray()
         .then((collections) => {
           if (collections.length > 0) {
             const roomCollection = db.collection(roomId);
-
             const userData = {
               username: user,
               score: 0,
             };
-
             roomCollection
               .insertOne(userData)
               .then((result) => {
@@ -135,7 +125,6 @@ let currentImage;
 
 app.post('/fetch', async (req, res) => {
   const roomId = req.body.id;
-
   try {
     const client = await MongoClient.connect(url);
     const db = client.db('Game');
@@ -238,7 +227,6 @@ app.post('/showUsers', async (req, res) => {
 
 app.post('/leaveRoom', async (req, res) => {
   const { user, roomId } = req.body;
-
   try {
     // Connect to MongoDB
     const client = await MongoClient.connect(url, {
@@ -278,7 +266,6 @@ app.post('/leaveRoom', async (req, res) => {
 // Delete a room (collection)
 app.post('/deleteRoom', async (req, res) => {
   const roomId = req.body.id;
-
   try {
     // Connect to MongoDB
     const client = await MongoClient.connect(url);
@@ -290,7 +277,6 @@ app.post('/deleteRoom', async (req, res) => {
       client.close();
       return res.status(404).send({ error: 'Room not found' });
     }
-
     // Delete the collection
     await db.collection(roomId).drop();
     res.status(200).send({ message: `Room ${roomId} deleted successfully` });
